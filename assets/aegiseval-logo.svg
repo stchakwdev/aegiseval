@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">AegisEval logo</title>
+  <desc id="desc">A precision shield containing an evaluation trace and verified outcome node.</desc>
+  <defs>
+    <linearGradient id="aegisGradient" x1="96" y1="72" x2="416" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8FAFC"/>
+      <stop offset="0.45" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="innerGradient" x1="160" y1="128" x2="352" y2="384" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.35 0 0 0 0 0.18 0 0 0 0 0.95 0 0 0 0.55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#050505"/>
+  <path d="M256 62 405 118v112c0 96-55 174-149 220-94-46-149-124-149-220V118L256 62Z" fill="none" stroke="url(#aegisGradient)" stroke-width="22" stroke-linejoin="round" filter="url(#softGlow)"/>
+  <path d="M256 104 363 144v82c0 72-39 130-107 166-68-36-107-94-107-166v-82l107-40Z" fill="url(#innerGradient)" stroke="#1F2937" stroke-width="3"/>
+  <path d="M177 245h54l30-68 35 130 25-62h49" fill="none" stroke="#F8FAFC" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="177" cy="245" r="14" fill="#06B6D4"/>
+  <circle cx="261" cy="177" r="14" fill="#8B5CF6"/>
+  <circle cx="296" cy="307" r="14" fill="#EC4899"/>
+  <circle cx="370" cy="245" r="14" fill="#22C55E"/>
+  <path d="m226 354 24 24 49-58" fill="none" stroke="#22C55E" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

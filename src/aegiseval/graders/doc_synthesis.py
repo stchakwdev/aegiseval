@@ -28,7 +28,9 @@ def grade_doc_synthesis(workspace: Path) -> GraderResult:
     if not citations:
         issues.append("missing citations")
     for citation in citations:
-        if not (workspace / "sources" / citation).exists():
+        citation_path = Path(citation)
+        candidates = [workspace / citation_path, workspace / "sources" / citation_path.name]
+        if not any(path.exists() for path in candidates):
             issues.append(f"fabricated or unresolved citation: {citation}")
 
     score_parts = 0

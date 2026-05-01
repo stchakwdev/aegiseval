@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">AegisEval social preview</title>
+  <desc id="desc">AegisEval brand banner for an agent evaluation infrastructure repository.</desc>
+  <defs>
+    <radialGradient id="bg1" cx="18%" cy="20%" r="65%">
+      <stop offset="0" stop-color="#312E81" stop-opacity="0.8"/>
+      <stop offset="0.48" stop-color="#111827" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#050505"/>
+    </radialGradient>
+    <radialGradient id="bg2" cx="84%" cy="72%" r="55%">
+      <stop offset="0" stop-color="#0891B2" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#0F172A" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#050505" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#F8FAFC"/>
+      <stop offset="0.48" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0v40" fill="none" stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="420" fill="#050505"/>
+  <rect width="1200" height="420" fill="url(#bg1)"/>
+  <rect width="1200" height="420" fill="url(#bg2)"/>
+  <rect width="1200" height="420" fill="url(#grid)"/>
+  <g transform="translate(84 70) scale(.55)">
+    <path d="M256 62 405 118v112c0 96-55 174-149 220-94-46-149-124-149-220V118L256 62Z" fill="none" stroke="url(#stroke)" stroke-width="22" stroke-linejoin="round"/>
+    <path d="M256 104 363 144v82c0 72-39 130-107 166-68-36-107-94-107-166v-82l107-40Z" fill="#050505" stroke="#1F2937" stroke-width="3"/>
+    <path d="M177 245h54l30-68 35 130 25-62h49" fill="none" stroke="#F8FAFC" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="177" cy="245" r="14" fill="#06B6D4"/>
+    <circle cx="261" cy="177" r="14" fill="#8B5CF6"/>
+    <circle cx="296" cy="307" r="14" fill="#EC4899"/>
+    <circle cx="370" cy="245" r="14" fill="#22C55E"/>
+    <path d="m226 354 24 24 49-58" fill="none" stroke="#22C55E" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="398" y="156" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="74" font-weight="760" letter-spacing="-3">AegisEval</text>
+  <text x="402" y="212" fill="#CBD5E1" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="30" font-weight="440">Reliable infrastructure for agentic knowledge-work evals</text>
+  <g fill="none" stroke-linecap="round" stroke-width="3" opacity="0.75">
+    <path d="M406 278h126" stroke="#8B5CF6"/>
+    <path d="M562 278h126" stroke="#06B6D4"/>
+    <path d="M718 278h126" stroke="#22C55E"/>
+  </g>
+  <g font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="600">
+    <text x="406" y="323" fill="#E5E7EB">traces</text>
+    <text x="562" y="323" fill="#E5E7EB">artifacts</text>
+    <text x="718" y="323" fill="#E5E7EB">eval audits</text>
+  </g>
+</svg>
