@@ -7,7 +7,7 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-from aegiseval.agents.openai_compatible import OpenAICompatibleAgent
+from aegiseval.agents.openai_compatible import OpenAICompatibleAgent, SYSTEM_PROMPT
 from aegiseval.schema import TaskSpec
 from aegiseval.traces import TraceWriter
 
@@ -30,11 +30,7 @@ class AnthropicAgent(OpenAICompatibleAgent):
             "model": self.model,
             "max_tokens": 4096,
             "temperature": 0,
-            "system": (
-                "You are an eval agent running inside a local workspace. "
-                "Return ONLY JSON with shape {\"files\": [{\"path\": string, \"content\": string}]}. "
-                "Do not wrap in markdown. Do not include explanations."
-            ),
+            "system": SYSTEM_PROMPT,
             "messages": [
                 {"role": "user", "content": self._build_prompt(task, workspace)},
             ],

@@ -54,7 +54,11 @@ def run_task(
     trace.write("trial_started", {"task_id": task.id, "agent": agent_name})
 
     agent = get_agent(agent_name, agent_command=agent_command, model=model, base_url=base_url, api_key_env=api_key_env)
-    agent.run(task, env.workspace, trace)
+    try:
+        agent.run(task, env.workspace, trace)
+    except Exception as exc:
+        trace.write("trial_failed", {"error_type": type(exc).__name__, "error": str(exc)})
+        raise
 
     grader_result = grade(task, env.workspace)
     artifacts = env.collect_artifacts([artifact.path for artifact in task.expected_artifacts])

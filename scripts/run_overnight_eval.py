@@ -10,7 +10,7 @@ from typing import Any
 
 from aegiseval.io import write_json
 from aegiseval.runner import run_task
-from aegiseval.suite import write_eval_audit, write_suite_html
+from aegiseval.suite import write_eval_audit, write_suite_html, write_trace_html
 from aegiseval.metrics import summarize_trials
 
 
@@ -58,6 +58,7 @@ def run_overnight_eval(
                     base_url=base_url,
                     api_key_env=api_key_env,
                 )
+                write_trace_html(trial_dir / "trace.html", trial_dir)
                 payload = result.model_dump()
                 payload["trial_index"] = trial_index
                 payload["run_dir"] = str(trial_dir)
@@ -72,6 +73,8 @@ def run_overnight_eval(
                     "error": str(exc),
                 }
                 failures.append(failure)
+                if (trial_dir / "trace.jsonl").exists() and (trial_dir / "result.json").exists():
+                    write_trace_html(trial_dir / "trace.html", trial_dir)
                 print(f"[trial-error] {task_id} #{trial_index} {type(exc).__name__}: {exc}", flush=True)
             if delay_seconds:
                 time.sleep(delay_seconds)

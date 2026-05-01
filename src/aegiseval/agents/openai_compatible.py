@@ -10,6 +10,12 @@ from typing import Any
 from aegiseval.schema import TaskSpec
 from aegiseval.traces import TraceWriter
 
+SYSTEM_PROMPT = (
+    "You are an eval agent running inside a local workspace. "
+    "Return ONLY JSON with shape {\"files\": [{\"path\": string, \"content\": string}]}. "
+    "Do not wrap in markdown. Do not include explanations."
+)
+
 
 class OpenAICompatibleAgent:
     """Adapter for OpenAI-compatible /v1/chat/completions APIs.
@@ -37,11 +43,7 @@ class OpenAICompatibleAgent:
             "messages": [
                 {
                     "role": "system",
-                    "content": (
-                        "You are an eval agent running inside a local workspace. "
-                        "Return ONLY JSON with shape {\"files\": [{\"path\": string, \"content\": string}]}. "
-                        "Do not wrap in markdown. Do not include explanations."
-                    ),
+                    "content": SYSTEM_PROMPT,
                 },
                 {
                     "role": "user",
@@ -79,12 +81,7 @@ class OpenAICompatibleAgent:
             raise RuntimeError(f"model API HTTP {exc.code}: {body}") from exc
 
     def _parse_files_payload(self, content: str) -> dict[str, Any]:
-        stripped = content.strip()
-        if stripped.startswith("```"):
-            stripped = stripped.strip("`")
-            if stripped.startswith("json"):
-                stripped = stripped[4:].strip()
-        payload = json.loads(stripped)
+        payload = json.loads(_strip_json_code_fence(content))
         if not isinstance(payload, dict) or not isinstance(payload.get("files"), list):
             raise ValueError("model response must contain a files list")
         for item in payload["files"]:
@@ -107,3 +104,15 @@ class OpenAICompatibleAgent:
             "Workspace files:\n"
             + "\n\n".join(fixture_listing)
         )
+
+
+def _strip_json_code_fence(content: str) -> str:
+    stripped = content.strip()
+    if not stripped.startswith("```"):
+        return stripped
+    lines = stripped.splitlines()
+    if not lines or not lines[0].startswith("```"):
+        return stripped
+    if lines[-1].strip() == "```":
+        return "\n".join(lines[1:-1]).strip()
+    return stripped

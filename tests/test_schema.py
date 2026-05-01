@@ -30,3 +30,16 @@ def test_task_spec_rejects_missing_expected_artifacts():
             expected_artifacts=[],
             grader={"name": "doc_synthesis", "kind": "code"},
         )
+
+
+@pytest.mark.parametrize("path", ["", "/tmp/final.md", "../final.md", "nested/../../final.md"])
+def test_task_spec_rejects_unsafe_expected_artifact_paths(path: str):
+    with pytest.raises(ValueError):
+        TaskSpec(
+            id="bad",
+            version="0.1.0",
+            domain="document_synthesis",
+            instruction="Do something",
+            expected_artifacts=[{"path": path, "kind": "markdown"}],
+            grader={"name": "doc_synthesis", "kind": "code"},
+        )

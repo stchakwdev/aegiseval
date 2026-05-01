@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
@@ -9,6 +10,14 @@ class ArtifactSpec(BaseModel):
     path: str
     kind: str
     required: bool = True
+
+    @field_validator("path")
+    @classmethod
+    def path_must_be_workspace_relative(cls, value: str) -> str:
+        path = Path(value)
+        if not value.strip() or path.is_absolute() or ".." in path.parts:
+            raise ValueError("artifact path must be a non-empty workspace-relative path")
+        return value
 
 
 class GraderSpec(BaseModel):

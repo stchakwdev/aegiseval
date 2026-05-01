@@ -10,6 +10,7 @@ from typer.testing import CliRunner
 
 from aegiseval.cli import app
 from aegiseval.runner import run_task
+from aegiseval.agents.openai_compatible import OpenAICompatibleAgent
 
 
 class _OpenAIStubHandler(BaseHTTPRequestHandler):
@@ -150,3 +151,11 @@ def test_cli_openai_compatible_agent_accepts_model_options(tmp_path: Path, monke
 
     assert result.exit_code == 0, result.output
     assert "[PASS]" in result.output
+
+
+def test_openai_compatible_agent_parses_json_code_fence():
+    agent = OpenAICompatibleAgent(model="stub", base_url="http://127.0.0.1")
+
+    payload = agent._parse_files_payload('```json\n{"files":[{"path":"final.md","content":"ok"}]}\n```')
+
+    assert payload["files"][0]["path"] == "final.md"
