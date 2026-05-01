@@ -51,24 +51,21 @@ class OpenAICompatibleAgent:
         api_key = os.environ.get(self.api_key_env)
         if not api_key:
             raise RuntimeError(f"missing API key environment variable: {self.api_key_env}")
-        payload = {
-            "model": self.model,
-            "messages": [
+        prompt = self._build_prompt(task, workspace)
+        payload = self._build_chat_payload(
+            [
                 {
                     "role": "system",
                     "content": SYSTEM_PROMPT,
                 },
                 {
                     "role": "user",
-                    "content": self._build_prompt(task, workspace),
+                    "content": prompt,
                 },
-            ],
-            "temperature": 0,
-        }
+            ]
+        )
         trace.write("model_request_started", {"agent": "openai-compatible", "model": self.model, "base_url": self.base_url})
-        response = self._post_json(f"{self.base_url}/chat/completions", payload, api_key)
-        content = response["choices"][0]["message"]["content"]
-        files_payload = self._parse_files_payload(content)
+        response, files_payload = self._request_files_payload(payload, api_key, trace)
         for item in files_payload["files"]:
             relative_path = Path(item["path"])
             if relative_path.is_absolute() or ".." in relative_path.parts:
@@ -85,6 +82,48 @@ class OpenAICompatibleAgent:
                 "response_id": response.get("id"),
             },
         )
+
+    def _build_chat_payload(self, messages: list[dict[str, str]]) -> dict[str, Any]:
+        return {
+            "model": self.model,
+            "messages": messages,
+            "temperature": 0,
+            "response_format": {"type": "json_object"},
+        }
+
+    def _request_files_payload(
+        self,
+        payload: dict[str, Any],
+        api_key: str,
+        trace: TraceWriter,
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        response = self._post_json(f"{self.base_url}/chat/completions", payload, api_key)
+        content = _response_content(response)
+        try:
+            return response, self._parse_files_payload(content)
+        except (json.JSONDecodeError, ValueError) as exc:
+            trace.write(
+                "model_response_parse_failed",
+                {
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                    "response_preview": _safe_preview(content),
+                },
+            )
+            repair_payload = self._build_chat_payload(
+                [
+                    {
+                        "role": "system",
+                        "content": SYSTEM_PROMPT,
+                    },
+                    {
+                        "role": "user",
+                        "content": _build_repair_prompt(content, str(exc)),
+                    },
+                ]
+            )
+            repair_response = self._post_json(f"{self.base_url}/chat/completions", repair_payload, api_key)
+            return repair_response, self._parse_files_payload(_response_content(repair_response))
 
     def _post_json(self, url: str, payload: dict[str, Any], api_key: str) -> dict[str, Any]:
         request = urllib.request.Request(
@@ -109,7 +148,7 @@ class OpenAICompatibleAgent:
         raise RuntimeError("model API request failed after retries")
 
     def _parse_files_payload(self, content: str) -> dict[str, Any]:
-        payload = json.loads(_strip_json_code_fence(content))
+        payload = _loads_json_object(content)
         if not isinstance(payload, dict) or not isinstance(payload.get("files"), list):
             raise ValueError("model response must contain a files list")
         for item in payload["files"]:
@@ -132,6 +171,52 @@ class OpenAICompatibleAgent:
             "Workspace files:\n"
             + "\n\n".join(fixture_listing)
         )
+
+
+def _response_content(response: dict[str, Any]) -> str:
+    return str(response["choices"][0]["message"].get("content") or "")
+
+
+def _build_repair_prompt(content: str, error: str) -> str:
+    return (
+        "Repair this model response into ONLY valid JSON with shape "
+        '{"files": [{"path": string, "content": string}]}.\n'
+        "Do not add markdown or commentary. Preserve the intended file paths and content when possible.\n"
+        f"Parser error: {error}\n"
+        "Original response:\n"
+        f"{_safe_preview(content, limit=8000)}"
+    )
+
+
+def _safe_preview(content: str, limit: int = 500) -> str:
+    sanitized = " ".join(content.replace("\x00", "").split())
+    return sanitized[:limit]
+
+
+def _loads_json_object(content: str) -> dict[str, Any]:
+    stripped = _strip_json_code_fence(content)
+    try:
+        payload = json.loads(stripped)
+    except json.JSONDecodeError:
+        payload = _extract_first_json_object(stripped)
+    if not isinstance(payload, dict):
+        raise ValueError("model response JSON must be an object")
+    return payload
+
+
+def _extract_first_json_object(content: str) -> dict[str, Any]:
+    decoder = json.JSONDecoder()
+    start = content.find("{")
+    while start != -1:
+        try:
+            payload, _ = decoder.raw_decode(content[start:])
+        except json.JSONDecodeError:
+            start = content.find("{", start + 1)
+            continue
+        if isinstance(payload, dict):
+            return payload
+        start = content.find("{", start + 1)
+    raise json.JSONDecodeError("No JSON object found", content, 0)
 
 
 def _strip_json_code_fence(content: str) -> str:
