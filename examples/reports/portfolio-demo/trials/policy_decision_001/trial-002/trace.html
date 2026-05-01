@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AegisEval Trace: policy_decision_001</title>
+  <style>
+    body { background: #0a0a0a; color: #f5f5f5; font-family: Inter, system-ui, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #333; padding: 0.55rem; text-align: left; vertical-align: top; }
+    th { background: #171717; }
+    pre { white-space: pre-wrap; margin: 0; }
+    .artifact-preview { background: #111; border: 1px solid #333; border-radius: 12px; margin: 1rem 0; padding: 1rem; box-shadow: 0 0 24px rgba(124,58,237,0.10); }
+    .artifact-preview h3 { color: #EC4899; margin-top: 0; }
+    .artifact-preview pre { color: #E5E7EB; }
+  </style>
+</head>
+<body>
+  <h1>Trace: policy_decision_001</h1>
+  <p><strong>Passed:</strong> True <strong>Score:</strong> 1.0</p>
+  <h2>Artifacts</h2>
+  <table><thead><tr><th>Path</th><th>Exists</th><th>SHA256</th></tr></thead><tbody><tr><td>decision.json</td><td>True</td><td>fdb634cc74800826868d4450c6adc5892c65a53539b71d12b3300d0465c0e067</td></tr><tr><td>rationale.md</td><td>True</td><td>f696b0b13f311323fabcdbe035f4a79924c48e182a68cf321a9713949fc32bf5</td></tr></tbody></table>
+  <h2>Artifact previews</h2>
+  <div class="previews"><section class="artifact-preview"><h3>decision.json</h3><pre>{
+  &quot;approved_ids&quot;: [
+    &quot;E-1001&quot;,
+    &quot;E-1004&quot;
+  ],
+  &quot;denied_ids&quot;: [
+    &quot;E-1002&quot;,
+    &quot;E-1003&quot;,
+    &quot;E-1005&quot;
+  ]
+}</pre></section><section class="artifact-preview"><h3>rationale.md</h3><pre># Reimbursement decisions
+
+E-1002 is denied because the software request exceeds the policy limit without sufficient finance approval.
+E-1003 is denied because the transit request is missing a receipt.
+E-1005 is denied because the meal request exceeds the 80 CAD meal limit.
+</pre></section></div>
+  <h2>Events</h2>
+  <table><thead><tr><th>Seq</th><th>Event</th><th>Payload</th></tr></thead><tbody><tr><td>1</td><td>trial_started</td><td><pre>{&#x27;agent&#x27;: &#x27;dummy&#x27;, &#x27;task_id&#x27;: &#x27;policy_decision_001&#x27;}</pre></td></tr><tr><td>2</td><td>agent_message</td><td><pre>{&#x27;agent&#x27;: &#x27;dummy&#x27;, &#x27;content&#x27;: &#x27;Solving policy_decision_001&#x27;}</pre></td></tr><tr><td>3</td><td>artifact_written</td><td><pre>{&#x27;path&#x27;: &#x27;decision.json&#x27;}</pre></td></tr><tr><td>4</td><td>artifact_written</td><td><pre>{&#x27;path&#x27;: &#x27;rationale.md&#x27;}</pre></td></tr><tr><td>5</td><td>grader_result</td><td><pre>{&#x27;details&#x27;: {&#x27;decision&#x27;: {&#x27;approved_ids&#x27;: [&#x27;E-1001&#x27;, &#x27;E-1004&#x27;], &#x27;denied_ids&#x27;: [&#x27;E-1002&#x27;, &#x27;E-1003&#x27;, &#x27;E-1005&#x27;]}, &#x27;expected_approved&#x27;: [&#x27;E-1001&#x27;, &#x27;E-1004&#x27;], &#x27;expected_denied&#x27;: [&#x27;E-1002&#x27;, &#x27;E-1003&#x27;, &#x27;E-1005&#x27;]}, &#x27;issues&#x27;: [], &#x27;passed&#x27;: True, &#x27;score&#x27;: 1.0}</pre></td></tr><tr><td>6</td><td>trial_finished</td><td><pre>{&#x27;passed&#x27;: True, &#x27;score&#x27;: 1.0}</pre></td></tr></tbody></table>
+</body>
+</html>

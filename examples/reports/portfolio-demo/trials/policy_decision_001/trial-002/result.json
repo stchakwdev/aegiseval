@@ -1,0 +1,22 @@
+{
+  "artifacts": [
+    {
+      "exists": true,
+      "path": "decision.json",
+      "sha256": "fdb634cc74800826868d4450c6adc5892c65a53539b71d12b3300d0465c0e067",
+      "size_bytes": 118
+    },
+    {
+      "exists": true,
+      "path": "rationale.md",
+      "sha256": "f696b0b13f311323fabcdbe035f4a79924c48e182a68cf321a9713949fc32bf5",
+      "size_bytes": 275
+    }
+  ],
+  "issues": [],
+  "passed": true,
+  "score": 1.0,
+  "task_id": "policy_decision_001",
+  "trace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-002/trace.jsonl",
+  "workspace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-002/workspace"
+}

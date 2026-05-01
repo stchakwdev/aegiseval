@@ -37,7 +37,7 @@ AegisEval is a local-first Python harness for building, running, grading, replay
 
 Agent evals are easy to make impressive and hard to make trustworthy. A pass rate can hide brittle graders, contaminated tasks, missing controls, API failures, reward hacking, and models that merely claim success. AegisEval treats reliability infrastructure as part of the eval itself.
 
-The harness is informed by Anthropic's public writing on agent evals, long-running agent harnesses, reward hacking, and automated auditing. See [`docs/anthropic-eval-harness-notes.md`](docs/anthropic-eval-harness-notes.md).
+The harness is informed by Anthropic's public writing on agent evals, long-running agent harnesses, reward hacking, and automated auditing. See [`docs/anthropic-eval-harness-notes.md`](docs/anthropic-eval-harness-notes.md). Security boundaries are documented in [`SECURITY.md`](SECURITY.md) and [`docs/threat-model.md`](docs/threat-model.md).
 
 ## Quickstart
 
@@ -113,6 +113,10 @@ PYTHONPATH=src python scripts/run_overnight_eval.py \
 
 See [`docs/overnight-evals.md`](docs/overnight-evals.md) for background execution, artifacts, and review checklist.
 
+## Example report
+
+A curated static report is included at [`examples/reports/portfolio-demo/report.html`](examples/reports/portfolio-demo/report.html). It runs five deterministic knowledge-work tasks across two trials each and includes trace drilldowns plus an eval-quality audit.
+
 ## Output artifacts
 
 A suite run writes:
@@ -140,7 +144,11 @@ AegisEval is built to demonstrate production-grade ownership of agentic evaluati
 ## Development
 
 ```bash
+python3 -m pip install -e '.[dev]'
 python3 -m pytest -q
+ruff check .
 PYTHONPATH=src python scripts/e2e_smoke.py
 python3 scripts/render_brand_assets.py
 ```
+
+AegisEval ships a `py.typed` marker and keeps runtime dependencies small. `ruff` is configured for local quality checks but is intentionally not required at runtime.

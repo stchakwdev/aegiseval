@@ -1,0 +1,103 @@
+{
+  "agent": "dummy",
+  "checks": [
+    {
+      "details": {
+        "trials_per_task": 2
+      },
+      "message": "Run at least two trials per task before trusting pass-rate changes.",
+      "name": "multi_trial_protocol",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "missing": []
+      },
+      "message": "Grade final environment artifacts/outcomes, not just agent claims.",
+      "name": "outcome_grading_recorded",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "missing": []
+      },
+      "message": "Every trial should have a complete start/finish lifecycle in its trace.",
+      "name": "trace_lifecycle_complete",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "missing": []
+      },
+      "message": "Artifacts must be recorded so humans can inspect final environment state.",
+      "name": "artifacts_recorded",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "flake_tasks": []
+      },
+      "message": "Flaky tasks should be explicit because stochastic agent failures compound.",
+      "name": "flake_visibility",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "agent": "dummy"
+      },
+      "message": "No model-backed adapter was used; model request tracing is not required for this suite.",
+      "name": "model_call_transparency",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "sample_count": 3
+      },
+      "message": "Keep a small deterministic queue of traces for human reading; scores alone are not enough.",
+      "name": "human_transcript_review_queue",
+      "status": "pass"
+    }
+  ],
+  "review_queue": [
+    {
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-001",
+      "score": 1.0,
+      "task_id": "contradiction_review_001",
+      "trace_html": "trials/contradiction_review_001/trial-001/trace.html",
+      "trial_index": 1
+    },
+    {
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002",
+      "score": 1.0,
+      "task_id": "contradiction_review_001",
+      "trace_html": "trials/contradiction_review_001/trial-002/trace.html",
+      "trial_index": 2
+    },
+    {
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-001",
+      "score": 1.0,
+      "task_id": "data_analysis_001",
+      "trace_html": "trials/data_analysis_001/trial-001/trace.html",
+      "trial_index": 1
+    }
+  ],
+  "sources": [
+    "Anthropic \u2014 Demystifying evals for AI agents",
+    "Anthropic \u2014 Effective harnesses for long-running agents",
+    "Anthropic \u2014 Building effective AI agents",
+    "Anthropic \u2014 Challenges in evaluating AI systems",
+    "Anthropic \u2014 From shortcuts to sabotage: natural emergent misalignment from reward hacking",
+    "Anthropic \u2014 Petri: An open-source auditing tool to accelerate AI safety research"
+  ],
+  "suite_dir": "examples/reports/portfolio-demo",
+  "summary": {
+    "flake_tasks": [],
+    "pass_at_1": 1.0,
+    "pass_power_2": 1.0,
+    "pass_rate": 1.0,
+    "total_trials": 10
+  }
+}

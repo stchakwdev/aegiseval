@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
 
-from aegiseval.agents.openai_compatible import OpenAICompatibleAgent, SYSTEM_PROMPT
+from aegiseval.agents.openai_compatible import SYSTEM_PROMPT, OpenAICompatibleAgent
 from aegiseval.schema import TaskSpec
 from aegiseval.traces import TraceWriter
 
@@ -19,8 +20,15 @@ class AnthropicAgent(OpenAICompatibleAgent):
     {"files": [{"path": "final.md", "content": "..."}]}
     """
 
-    def __init__(self, model: str, base_url: str = "https://api.anthropic.com/v1", api_key_env: str = "ANTHROPIC_API_KEY", timeout: int = 120):
-        super().__init__(model=model, base_url=base_url, api_key_env=api_key_env, timeout=timeout)
+    def __init__(
+        self,
+        model: str,
+        base_url: str = "https://api.anthropic.com/v1",
+        api_key_env: str = "ANTHROPIC_API_KEY",
+        timeout: int = 120,
+        retries: int = 2,
+    ):
+        super().__init__(model=model, base_url=base_url, api_key_env=api_key_env, timeout=timeout, retries=retries)
 
     def run(self, task: TaskSpec, workspace: Path, trace: TraceWriter) -> None:
         api_key = os.environ.get(self.api_key_env)
@@ -47,7 +55,15 @@ class AnthropicAgent(OpenAICompatibleAgent):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(str(item["content"]), encoding="utf-8")
             trace.write("model_artifact_written", {"path": str(relative_path), "bytes": target.stat().st_size})
-        trace.write("model_request_finished", {"files_written": len(files_payload["files"])})
+        trace.write(
+            "model_request_finished",
+            {
+                "files_written": len(files_payload["files"]),
+                "usage": response.get("usage", {}),
+                "response_id": response.get("id"),
+                "stop_reason": response.get("stop_reason"),
+            },
+        )
 
     def _post_anthropic_json(self, url: str, payload: dict[str, Any], api_key: str) -> dict[str, Any]:
         request = urllib.request.Request(
@@ -60,9 +76,17 @@ class AnthropicAgent(OpenAICompatibleAgent):
             },
             method="POST",
         )
-        try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:  # noqa: S310 - user-configured local/API URL
-                return json.loads(response.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"anthropic API HTTP {exc.code}: {body}") from exc
+        for attempt in range(self.retries + 1):
+            try:
+                with urllib.request.urlopen(request, timeout=self.timeout) as response:  # noqa: S310 - user-configured local/API URL
+                    return json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                body = exc.read().decode("utf-8", errors="replace")
+                if exc.code not in {429, 500, 502, 503, 504} or attempt >= self.retries:
+                    raise RuntimeError(f"anthropic API HTTP {exc.code}: {body}") from exc
+                time.sleep(2**attempt)
+            except urllib.error.URLError as exc:
+                if attempt >= self.retries:
+                    raise RuntimeError(f"anthropic API connection error: {exc}") from exc
+                time.sleep(2**attempt)
+        raise RuntimeError("anthropic API request failed after retries")

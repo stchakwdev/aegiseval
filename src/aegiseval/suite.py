@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from html import escape
 import json
+from html import escape
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +21,8 @@ def run_suite(
     model: str | None = None,
     base_url: str | None = None,
     api_key_env: str = "OPENAI_API_KEY",
+    timeout: int = 120,
+    retries: int = 2,
 ) -> dict[str, Any]:
     if trials < 1:
         raise ValueError("trials must be >= 1")
@@ -39,6 +41,8 @@ def run_suite(
                 model=model,
                 base_url=base_url,
                 api_key_env=api_key_env,
+                timeout=timeout,
+                retries=retries,
             )
             write_trace_html(trial_dir / "trace.html", trial_dir)
             payload = result.model_dump()
@@ -65,21 +69,23 @@ def write_suite_html(path: Path, suite_result: dict[str, Any]) -> None:
     for trial in suite_result["trials"]:
         issues = "; ".join(trial.get("issues", [])) or "none"
         run_dir = Path(trial["run_dir"])
+        passed = bool(trial["passed"])
         try:
             trace_href = str(run_dir.relative_to(path.parent) / "trace.html")
         except ValueError:
             trace_href = str(run_dir / "trace.html")
         rows.append(
-            "<tr>"
+            f"<tr data-status=\"{'pass' if passed else 'fail'}\" data-task=\"{escape(str(trial['task_id']))}\">"
             f"<td>{escape(str(trial['task_id']))}</td>"
             f"<td>{escape(str(trial['trial_index']))}</td>"
-            f"<td>{escape(str(trial['passed']))}</td>"
+            f"<td><span class=\"chip {'pass' if passed else 'fail'}\">{'PASS' if passed else 'FAIL'}</span></td>"
             f"<td>{escape(str(trial['score']))}</td>"
             f"<td>{escape(issues)}</td>"
             f"<td><a href=\"{escape(trace_href)}\">trace.html</a></td>"
-            f"<td>{escape(str(trial['run_dir']))}</td>"
+            f"<td><code>{escape(str(trial['run_dir']))}</code></td>"
             "</tr>"
         )
+    task_cards = render_task_summary_cards(suite_result["trials"])
     summary = suite_result["summary"]
     html = f"""<!doctype html>
 <html lang="en">
@@ -88,10 +94,17 @@ def write_suite_html(path: Path, suite_result: dict[str, Any]) -> None:
   <title>AegisEval Suite Report</title>
   <style>
     body {{ background: #0a0a0a; color: #f5f5f5; font-family: Inter, system-ui, sans-serif; margin: 2rem; }}
+    a {{ color: #67e8f9; }}
     table {{ border-collapse: collapse; width: 100%; margin-top: 1rem; }}
-    th, td {{ border: 1px solid #333; padding: 0.55rem; text-align: left; }}
+    th, td {{ border: 1px solid #333; padding: 0.55rem; text-align: left; vertical-align: top; }}
     th {{ background: #171717; }}
+    code {{ color: #c4b5fd; }}
     .card {{ background: #111; border: 1px solid #333; border-radius: 12px; padding: 1rem; margin: 1rem 0; }}
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }}
+    .chip {{ border-radius: 999px; display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.55rem; }}
+    .chip.pass {{ background: rgba(34,197,94,0.16); color: #86efac; border: 1px solid rgba(34,197,94,0.4); }}
+    .chip.fail {{ background: rgba(239,68,68,0.16); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }}
+    .filters button {{ background: #171717; border: 1px solid #333; color: #f5f5f5; border-radius: 8px; padding: 0.45rem 0.75rem; margin-right: 0.5rem; cursor: pointer; }}
   </style>
 </head>
 <body>
@@ -101,17 +114,52 @@ def write_suite_html(path: Path, suite_result: dict[str, Any]) -> None:
     <p><strong>Total trials:</strong> {escape(str(summary['total_trials']))}</p>
     <p><strong>Pass rate:</strong> {escape(str(summary['pass_rate']))}</p>
     <p><strong>Flake tasks:</strong> {escape(', '.join(summary['flake_tasks']) or 'none')}</p>
-    <p><strong>Eval-quality audit:</strong> eval_audit.md</p>
+    <p><strong>Eval-quality audit:</strong> <a class="audit-link" href="eval_audit.md">eval_audit.md</a></p>
+  </div>
+  <h2>Task summary</h2>
+  <div class="grid">{task_cards}</div>
+  <h2>Trials</h2>
+  <div class="filters" aria-label="trial filters">
+    <button type="button" onclick="filterRows('all')">All</button>
+    <button type="button" onclick="filterRows('pass')">Passed</button>
+    <button type="button" onclick="filterRows('fail')">Failed</button>
   </div>
   <table>
     <thead><tr><th>Task</th><th>Trial</th><th>Passed</th><th>Score</th><th>Issues</th><th>Trace</th><th>Run dir</th></tr></thead>
     <tbody>{''.join(rows)}</tbody>
   </table>
+  <script>
+    function filterRows(status) {{
+      document.querySelectorAll('tbody tr').forEach((row) => {{
+        row.style.display = status === 'all' || row.dataset.status === status ? '' : 'none';
+      }});
+    }}
+  </script>
 </body>
 </html>
 """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(html, encoding="utf-8")
+
+
+def render_task_summary_cards(trials: list[dict[str, Any]]) -> str:
+    by_task: dict[str, list[dict[str, Any]]] = {}
+    for trial in trials:
+        by_task.setdefault(str(trial["task_id"]), []).append(trial)
+    cards = []
+    for task_id, task_trials in sorted(by_task.items()):
+        passed = sum(1 for trial in task_trials if trial.get("passed"))
+        total = len(task_trials)
+        avg_score = sum(float(trial.get("score", 0.0)) for trial in task_trials) / total if total else 0.0
+        status = "pass" if passed == total else "fail"
+        cards.append(
+            '<section class="card">'
+            f"<h3>{escape(task_id)}</h3>"
+            f"<p><span class=\"chip {status}\">{passed}/{total} passed</span></p>"
+            f"<p><strong>Average score:</strong> {avg_score:.3f}</p>"
+            "</section>"
+        )
+    return "".join(cards)
 
 
 def write_trace_html(path: Path, run_dir: Path) -> None:

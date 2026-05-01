@@ -46,4 +46,8 @@ def test_cli_suite_writes_static_html_report(tmp_path: Path):
     assert "doc_synthesis_001" in html
     assert "data_analysis_001" in html
     assert "trace.html" in html
+    assert "Task summary" in html
+    assert "filterRows" in html
+    assert "chip pass" in html
+    assert "eval_audit.md" in html
     assert (out / "trials" / "doc_synthesis_001" / "trial-001" / "trace.html").exists()

@@ -1,0 +1,6 @@
+{"event": "trial_started", "payload": {"agent": "dummy", "task_id": "policy_decision_001"}, "seq": 1, "ts": "2026-05-01T02:08:42.903956+00:00"}
+{"event": "agent_message", "payload": {"agent": "dummy", "content": "Solving policy_decision_001"}, "seq": 2, "ts": "2026-05-01T02:08:42.903995+00:00"}
+{"event": "artifact_written", "payload": {"path": "decision.json"}, "seq": 3, "ts": "2026-05-01T02:08:42.904096+00:00"}
+{"event": "artifact_written", "payload": {"path": "rationale.md"}, "seq": 4, "ts": "2026-05-01T02:08:42.904119+00:00"}
+{"event": "grader_result", "payload": {"details": {"decision": {"approved_ids": ["E-1001", "E-1004"], "denied_ids": ["E-1002", "E-1003", "E-1005"]}, "expected_approved": ["E-1001", "E-1004"], "expected_denied": ["E-1002", "E-1003", "E-1005"]}, "issues": [], "passed": true, "score": 1.0}, "seq": 5, "ts": "2026-05-01T02:08:42.904273+00:00"}
+{"event": "trial_finished", "payload": {"passed": true, "score": 1.0}, "seq": 6, "ts": "2026-05-01T02:08:42.904320+00:00"}

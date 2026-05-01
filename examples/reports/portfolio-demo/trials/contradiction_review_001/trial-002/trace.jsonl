@@ -1,0 +1,5 @@
+{"event": "trial_started", "payload": {"agent": "dummy", "task_id": "contradiction_review_001"}, "seq": 1, "ts": "2026-05-01T02:08:42.901347+00:00"}
+{"event": "agent_message", "payload": {"agent": "dummy", "content": "Solving contradiction_review_001"}, "seq": 2, "ts": "2026-05-01T02:08:42.901386+00:00"}
+{"event": "artifact_written", "payload": {"path": "final.md"}, "seq": 3, "ts": "2026-05-01T02:08:42.901446+00:00"}
+{"event": "grader_result", "payload": {"details": {"checks": {"mentions p95 latency regression": true, "mentions product benefit": true, "mentions release hold": true, "mentions threshold": true}, "citations": ["product_summary.md", "reliability_review.md"]}, "issues": [], "passed": true, "score": 1.0}, "seq": 4, "ts": "2026-05-01T02:08:42.901645+00:00"}
+{"event": "trial_finished", "payload": {"passed": true, "score": 1.0}, "seq": 5, "ts": "2026-05-01T02:08:42.901697+00:00"}

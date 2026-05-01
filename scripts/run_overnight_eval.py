@@ -4,15 +4,14 @@ import argparse
 import json
 import os
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from aegiseval.io import write_json
+from aegiseval.metrics import summarize_trials
 from aegiseval.runner import run_task
 from aegiseval.suite import write_eval_audit, write_suite_html, write_trace_html
-from aegiseval.metrics import summarize_trials
-
 
 DEFAULT_TASKS = [Path("tasks/doc_synthesis_001"), Path("tasks/data_analysis_001")]
 
@@ -39,11 +38,13 @@ def run_overnight_eval(
     base_url: str | None,
     api_key_env: str,
     delay_seconds: float,
+    timeout: int = 120,
+    retries: int = 2,
 ) -> dict[str, Any]:
     out_dir.mkdir(parents=True, exist_ok=True)
     trial_payloads: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
-    started_at = datetime.now(timezone.utc).isoformat()
+    started_at = datetime.now(UTC).isoformat()
 
     for trial_index in range(1, trials + 1):
         for task_dir in tasks:
@@ -57,6 +58,8 @@ def run_overnight_eval(
                     model=model,
                     base_url=base_url,
                     api_key_env=api_key_env,
+                    timeout=timeout,
+                    retries=retries,
                 )
                 write_trace_html(trial_dir / "trace.html", trial_dir)
                 payload = result.model_dump()
@@ -89,7 +92,7 @@ def run_overnight_eval(
         "trials": trial_payloads,
         "failures": failures,
         "started_at": started_at,
-        "finished_at": datetime.now(timezone.utc).isoformat(),
+        "finished_at": datetime.now(UTC).isoformat(),
     }
     write_json(out_dir / "suite_result.json", suite_result)
     write_suite_html(out_dir / "report.html", suite_result)
@@ -106,6 +109,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default="z-ai/glm-5.1")
     parser.add_argument("--base-url", default="https://openrouter.ai/api/v1")
     parser.add_argument("--api-key-env", default="OPENROUTER_API_KEY")
+    parser.add_argument("--timeout", type=int, default=120, help="Model API request timeout in seconds.")
+    parser.add_argument("--retries", type=int, default=2, help="Retries for transient model API failures.")
     parser.add_argument("--env-file", type=Path, default=Path.home() / ".hermes" / ".env")
     parser.add_argument("--delay-seconds", type=float, default=1.0)
     return parser.parse_args()
@@ -128,6 +133,8 @@ def main() -> None:
         base_url=args.base_url,
         api_key_env=args.api_key_env,
         delay_seconds=args.delay_seconds,
+        timeout=args.timeout,
+        retries=args.retries,
     )
     print(json.dumps({"summary": result["summary"], "failures": len(result["failures"]), "out": str(args.out)}, indent=2), flush=True)
 

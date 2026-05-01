@@ -1,0 +1,21 @@
+id: contradiction_review_001
+version: 0.2.0
+domain: contradiction_review
+instruction: >
+  Review the source notes and write final.md. The memo must identify the central contradiction,
+  state whether release should proceed, name the decisive metric, and cite source files in square brackets.
+expected_artifacts:
+  - path: final.md
+    kind: markdown
+grader:
+  name: contradiction_review
+  kind: code
+tools:
+  - name: filesystem
+    description: Read local source notes and write final.md.
+metadata:
+  difficulty: intermediate
+  known_failure_modes:
+    - accepts optimistic summary while ignoring reliability note
+    - misses contradiction between aggregate success and p95 latency
+    - cites unsupported release recommendation

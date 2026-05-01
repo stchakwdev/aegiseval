@@ -1,0 +1,16 @@
+{
+  "artifacts": [
+    {
+      "exists": true,
+      "path": "final.md",
+      "sha256": "27f1778f04366b7fd3fa63efdbb50331c8fe76f8d9f496ffe13b8887930377e9",
+      "size_bytes": 136
+    }
+  ],
+  "issues": [],
+  "passed": true,
+  "score": 1.0,
+  "task_id": "doc_synthesis_001",
+  "trace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-002/trace.jsonl",
+  "workspace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-002/workspace"
+}

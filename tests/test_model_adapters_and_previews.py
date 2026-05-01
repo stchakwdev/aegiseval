@@ -1,21 +1,21 @@
 from __future__ import annotations
 
 import json
-import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 from typer.testing import CliRunner
 
+from aegiseval.agents.openai_compatible import OpenAICompatibleAgent
 from aegiseval.cli import app
 from aegiseval.runner import run_task
-from aegiseval.agents.openai_compatible import OpenAICompatibleAgent
 
 
 class _OpenAIStubHandler(BaseHTTPRequestHandler):
     response_content = ""
     seen_requests: list[dict] = []
+    transient_failures_remaining = 0
 
     def do_POST(self) -> None:  # noqa: N802
         length = int(self.headers.get("content-length", "0"))
@@ -27,6 +27,15 @@ class _OpenAIStubHandler(BaseHTTPRequestHandler):
                 "body": body,
             }
         )
+        if self.__class__.transient_failures_remaining > 0:
+            self.__class__.transient_failures_remaining -= 1
+            encoded = b'{"error":"temporary"}'
+            self.send_response(500)
+            self.send_header("content-type", "application/json")
+            self.send_header("content-length", str(len(encoded)))
+            self.end_headers()
+            self.wfile.write(encoded)
+            return
         payload = {
             "choices": [
                 {
@@ -50,6 +59,7 @@ class _OpenAIStubHandler(BaseHTTPRequestHandler):
 def _start_stub(response_content: str):
     _OpenAIStubHandler.response_content = response_content
     _OpenAIStubHandler.seen_requests = []
+    _OpenAIStubHandler.transient_failures_remaining = 0
     server = HTTPServer(("127.0.0.1", 0), _OpenAIStubHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
@@ -142,6 +152,10 @@ def test_cli_openai_compatible_agent_accepts_model_options(tmp_path: Path, monke
                 f"http://127.0.0.1:{server.server_port}/v1",
                 "--api-key-env",
                 "AEGISEVAL_TEST_API_KEY",
+                "--timeout",
+                "5",
+                "--retries",
+                "1",
                 "--out",
                 str(tmp_path / "run"),
             ],
@@ -159,3 +173,34 @@ def test_openai_compatible_agent_parses_json_code_fence():
     payload = agent._parse_files_payload('```json\n{"files":[{"path":"final.md","content":"ok"}]}\n```')
 
     assert payload["files"][0]["path"] == "final.md"
+
+
+def test_openai_compatible_agent_retries_transient_failure(tmp_path: Path, monkeypatch):
+    response_content = json.dumps(
+        {
+            "files": [
+                {
+                    "path": "final.md",
+                    "content": "Project Aurora reduced search time by 35% [memo_a.md]. The key rollout risk is fabricated citations [memo_b.md].",
+                }
+            ]
+        }
+    )
+    server = _start_stub(response_content)
+    _OpenAIStubHandler.transient_failures_remaining = 1
+    monkeypatch.setenv("AEGISEVAL_TEST_API_KEY", "test-key")
+    try:
+        result = run_task(
+            Path("tasks/doc_synthesis_001"),
+            agent_name="openai-compatible",
+            out_dir=tmp_path / "run",
+            model="stub-model",
+            base_url=f"http://127.0.0.1:{server.server_port}/v1",
+            api_key_env="AEGISEVAL_TEST_API_KEY",
+            retries=1,
+        )
+    finally:
+        server.shutdown()
+
+    assert result.passed is True
+    assert len(_OpenAIStubHandler.seen_requests) == 2

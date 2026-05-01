@@ -1,0 +1,22 @@
+{
+  "artifacts": [
+    {
+      "exists": true,
+      "path": "incident.json",
+      "sha256": "4c081b254784a368cf2e25539dff42ac7ee591111c659284e16648024b974197",
+      "size_bytes": 286
+    },
+    {
+      "exists": true,
+      "path": "postmortem.md",
+      "sha256": "6c533fb3316f8326135060e8027ef2bd47260b595b6127c9945159d1f9f227f4",
+      "size_bytes": 227
+    }
+  ],
+  "issues": [],
+  "passed": true,
+  "score": 1.0,
+  "task_id": "incident_analysis_001",
+  "trace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-001/trace.jsonl",
+  "workspace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-001/workspace"
+}

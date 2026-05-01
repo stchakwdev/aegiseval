@@ -1,0 +1,16 @@
+{
+  "artifacts": [
+    {
+      "exists": true,
+      "path": "final.md",
+      "sha256": "34ac678d3cbb038b25e5cb70d23585b419796c193103e697a1b8d0de723d9219",
+      "size_bytes": 442
+    }
+  ],
+  "issues": [],
+  "passed": true,
+  "score": 1.0,
+  "task_id": "contradiction_review_001",
+  "trace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002/trace.jsonl",
+  "workspace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002/workspace"
+}

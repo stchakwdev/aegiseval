@@ -47,7 +47,10 @@ def test_suite_report_links_resolve_to_trace_pages(tmp_path: Path):
     parser.feed(report.read_text(encoding="utf-8"))
 
     assert parser.links
-    for href in parser.links:
+    trace_links = [href for href in parser.links if href.endswith("trace.html")]
+    assert trace_links
+    assert "eval_audit.md" in parser.links
+    for href in trace_links:
         target = report.parent / href
         assert target.exists(), href
         trace_html = target.read_text(encoding="utf-8")

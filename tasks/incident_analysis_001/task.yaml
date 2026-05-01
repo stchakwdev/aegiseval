@@ -1,0 +1,23 @@
+id: incident_analysis_001
+version: 0.2.0
+domain: incident_analysis
+instruction: >
+  Analyze incident_events.json and write incident.json with root_cause, highest_severity,
+  customer_impact_minutes, and followups. Also write postmortem.md with a concise timeline.
+expected_artifacts:
+  - path: incident.json
+    kind: json
+  - path: postmortem.md
+    kind: markdown
+grader:
+  name: incident_analysis
+  kind: code
+tools:
+  - name: filesystem
+    description: Read incident event logs and write structured incident artifacts.
+metadata:
+  difficulty: intermediate
+  known_failure_modes:
+    - treats first alert as root cause
+    - misses customer impact window
+    - omits follow-up action for circuit breaker

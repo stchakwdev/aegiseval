@@ -1,0 +1,5 @@
+{"event": "trial_started", "payload": {"agent": "dummy", "task_id": "doc_synthesis_001"}, "seq": 1, "ts": "2026-05-01T02:08:42.890336+00:00"}
+{"event": "agent_message", "payload": {"agent": "dummy", "content": "Solving doc_synthesis_001"}, "seq": 2, "ts": "2026-05-01T02:08:42.890377+00:00"}
+{"event": "artifact_written", "payload": {"path": "final.md"}, "seq": 3, "ts": "2026-05-01T02:08:42.890446+00:00"}
+{"event": "grader_result", "payload": {"details": {"citations": ["memo_a.md", "memo_b.md"]}, "issues": [], "passed": true, "score": 1.0}, "seq": 4, "ts": "2026-05-01T02:08:42.890636+00:00"}
+{"event": "trial_finished", "payload": {"passed": true, "score": 1.0}, "seq": 5, "ts": "2026-05-01T02:08:42.890685+00:00"}

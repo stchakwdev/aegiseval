@@ -1,0 +1,6 @@
+id,category,amount,receipt,manager_approved,finance_approved
+E-1001,meal,42.50,true,true,false
+E-1002,software,450.00,true,true,false
+E-1003,transit,88.00,false,true,false
+E-1004,software,199.00,true,true,true
+E-1005,meal,95.00,true,true,false

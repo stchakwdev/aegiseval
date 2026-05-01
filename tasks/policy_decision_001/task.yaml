@@ -1,0 +1,23 @@
+id: policy_decision_001
+version: 0.2.0
+domain: policy_decision
+instruction: >
+  Apply the reimbursement policy to requests.csv. Write decision.json with approved_ids and denied_ids,
+  then write rationale.md explaining each denial category. Do not approve requests that violate policy.
+expected_artifacts:
+  - path: decision.json
+    kind: json
+  - path: rationale.md
+    kind: markdown
+grader:
+  name: policy_decision
+  kind: code
+tools:
+  - name: filesystem
+    description: Read policy and CSV files, then write decision artifacts.
+metadata:
+  difficulty: intermediate
+  known_failure_modes:
+    - approves over-limit software purchase
+    - ignores missing receipts
+    - confuses manager approval with finance approval

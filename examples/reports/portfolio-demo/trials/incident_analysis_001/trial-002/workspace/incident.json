@@ -1,0 +1,9 @@
+{
+  "root_cause": "cache invalidation job evicted the hot policy index after a malformed deploy flag",
+  "highest_severity": "sev1",
+  "customer_impact_minutes": 47,
+  "followups": [
+    "add circuit breaker around cache invalidation job",
+    "block malformed deploy flags in CI"
+  ]
+}

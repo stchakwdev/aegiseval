@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -24,15 +25,27 @@ class OpenAICompatibleAgent:
     {"files": [{"path": "final.md", "content": "..."}]}
     """
 
-    def __init__(self, model: str, base_url: str, api_key_env: str = "OPENAI_API_KEY", timeout: int = 120):
+    def __init__(
+        self,
+        model: str,
+        base_url: str,
+        api_key_env: str = "OPENAI_API_KEY",
+        timeout: int = 120,
+        retries: int = 2,
+    ):
         if not model.strip():
             raise ValueError("model is required")
         if not base_url.strip():
             raise ValueError("base_url is required")
+        if timeout <= 0:
+            raise ValueError("timeout must be > 0")
+        if retries < 0:
+            raise ValueError("retries must be >= 0")
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.api_key_env = api_key_env
         self.timeout = timeout
+        self.retries = retries
 
     def run(self, task: TaskSpec, workspace: Path, trace: TraceWriter) -> None:
         api_key = os.environ.get(self.api_key_env)
@@ -64,7 +77,14 @@ class OpenAICompatibleAgent:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(str(item["content"]), encoding="utf-8")
             trace.write("model_artifact_written", {"path": str(relative_path), "bytes": target.stat().st_size})
-        trace.write("model_request_finished", {"files_written": len(files_payload["files"])})
+        trace.write(
+            "model_request_finished",
+            {
+                "files_written": len(files_payload["files"]),
+                "usage": response.get("usage", {}),
+                "response_id": response.get("id"),
+            },
+        )
 
     def _post_json(self, url: str, payload: dict[str, Any], api_key: str) -> dict[str, Any]:
         request = urllib.request.Request(
@@ -73,12 +93,20 @@ class OpenAICompatibleAgent:
             headers={"content-type": "application/json", "authorization": f"Bearer {api_key}"},
             method="POST",
         )
-        try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:  # noqa: S310 - user-configured local/API URL
-                return json.loads(response.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"model API HTTP {exc.code}: {body}") from exc
+        for attempt in range(self.retries + 1):
+            try:
+                with urllib.request.urlopen(request, timeout=self.timeout) as response:  # noqa: S310 - user-configured local/API URL
+                    return json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                body = exc.read().decode("utf-8", errors="replace")
+                if exc.code not in {429, 500, 502, 503, 504} or attempt >= self.retries:
+                    raise RuntimeError(f"model API HTTP {exc.code}: {body}") from exc
+                time.sleep(2**attempt)
+            except urllib.error.URLError as exc:
+                if attempt >= self.retries:
+                    raise RuntimeError(f"model API connection error: {exc}") from exc
+                time.sleep(2**attempt)
+        raise RuntimeError("model API request failed after retries")
 
     def _parse_files_payload(self, content: str) -> dict[str, Any]:
         payload = json.loads(_strip_json_code_fence(content))

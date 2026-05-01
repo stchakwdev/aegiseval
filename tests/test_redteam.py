@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from aegiseval.redteam.citation_fabrication import CitationFabricationScanner
 from aegiseval.redteam.artifact_spoofing import ArtifactSpoofingScanner
+from aegiseval.redteam.citation_fabrication import CitationFabricationScanner
 
 
 def test_citation_fabrication_scanner_reports_unresolved_citation(tmp_path: Path):

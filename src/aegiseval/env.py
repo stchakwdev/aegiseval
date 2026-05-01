@@ -16,7 +16,7 @@ class TrialEnvironment:
     workspace: Path
 
     @classmethod
-    def create(cls, task_id: str, fixtures_dir: Path, root: Path) -> "TrialEnvironment":
+    def create(cls, task_id: str, fixtures_dir: Path, root: Path) -> TrialEnvironment:
         cls._prepare_run_root(root)
         workspace = root / "workspace"
         workspace.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,6 @@
+{"event": "trial_started", "payload": {"agent": "dummy", "task_id": "incident_analysis_001"}, "seq": 1, "ts": "2026-05-01T02:08:42.911837+00:00"}
+{"event": "agent_message", "payload": {"agent": "dummy", "content": "Solving incident_analysis_001"}, "seq": 2, "ts": "2026-05-01T02:08:42.911871+00:00"}
+{"event": "artifact_written", "payload": {"path": "incident.json"}, "seq": 3, "ts": "2026-05-01T02:08:42.911969+00:00"}
+{"event": "artifact_written", "payload": {"path": "postmortem.md"}, "seq": 4, "ts": "2026-05-01T02:08:42.911993+00:00"}
+{"event": "grader_result", "payload": {"details": {"checks": {"customer_impact_minutes": true, "followups": true, "highest_severity": true, "root_cause": true}, "incident": {"customer_impact_minutes": 47, "followups": ["add circuit breaker around cache invalidation job", "block malformed deploy flags in CI"], "highest_severity": "sev1", "root_cause": "cache invalidation job evicted the hot policy index after a malformed deploy flag"}}, "issues": [], "passed": true, "score": 1.0}, "seq": 5, "ts": "2026-05-01T02:08:42.912135+00:00"}
+{"event": "trial_finished", "payload": {"passed": true, "score": 1.0}, "seq": 6, "ts": "2026-05-01T02:08:42.912181+00:00"}

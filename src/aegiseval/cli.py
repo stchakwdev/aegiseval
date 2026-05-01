@@ -31,6 +31,8 @@ def run(
     model: str | None = typer.Option(None, "--model", help="Model name for model-backed agents"),
     base_url: str | None = typer.Option(None, "--base-url", help="Base URL for OpenAI-compatible APIs, e.g. https://api.openai.com/v1"),
     api_key_env: str = typer.Option("OPENAI_API_KEY", "--api-key-env", help="Environment variable containing API key"),
+    timeout: int = typer.Option(120, "--timeout", help="Model API request timeout in seconds"),
+    retries: int = typer.Option(2, "--retries", help="Retries for transient model API failures"),
     out: Path = typer.Option(Path("runs/latest"), "--out", help="Output run directory"),
 ) -> None:
     """Run one task with an agent."""
@@ -42,6 +44,8 @@ def run(
         model=model,
         base_url=base_url,
         api_key_env=api_key_env,
+        timeout=timeout,
+        retries=retries,
     )
     status = "PASS" if result.passed else "FAIL"
     print(f"[{status}] {result.task_id} score={result.score} out={out}")
@@ -75,6 +79,8 @@ def suite(
     model: str | None = typer.Option(None, "--model", help="Model name for model-backed agents"),
     base_url: str | None = typer.Option(None, "--base-url", help="Base URL for OpenAI-compatible APIs"),
     api_key_env: str = typer.Option("OPENAI_API_KEY", "--api-key-env", help="Environment variable containing API key"),
+    timeout: int = typer.Option(120, "--timeout", help="Model API request timeout in seconds"),
+    retries: int = typer.Option(2, "--retries", help="Retries for transient model API failures"),
     out: Path = typer.Option(Path("runs/suite"), "--out", help="Suite output directory"),
 ) -> None:
     """Run multiple tasks across one or more trials and write an HTML report."""
@@ -87,6 +93,8 @@ def suite(
         model=model,
         base_url=base_url,
         api_key_env=api_key_env,
+        timeout=timeout,
+        retries=retries,
     )
     print(
         f"[PASS] suite total_trials={result['summary']['total_trials']} "

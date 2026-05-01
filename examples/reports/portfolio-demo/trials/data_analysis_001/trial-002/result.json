@@ -1,0 +1,22 @@
+{
+  "artifacts": [
+    {
+      "exists": true,
+      "path": "answer.json",
+      "sha256": "74c522dca766bab93bd548ed02dbaa01f7b3b7b2e5b0754762547288268f39fa",
+      "size_bytes": 72
+    },
+    {
+      "exists": true,
+      "path": "report.md",
+      "sha256": "60d45bf5c5a44334c1d56e780b77489745f90bc36af416580274fe61d9d7e2b2",
+      "size_bytes": 89
+    }
+  ],
+  "issues": [],
+  "passed": true,
+  "score": 1.0,
+  "task_id": "data_analysis_001",
+  "trace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-002/trace.jsonl",
+  "workspace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-002/workspace"
+}

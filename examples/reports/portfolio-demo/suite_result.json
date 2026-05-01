@@ -1,0 +1,236 @@
+{
+  "agent": "dummy",
+  "summary": {
+    "flake_tasks": [],
+    "pass_at_1": 1.0,
+    "pass_power_2": 1.0,
+    "pass_rate": 1.0,
+    "total_trials": 10
+  },
+  "tasks": [
+    "tasks/doc_synthesis_001",
+    "tasks/data_analysis_001",
+    "tasks/contradiction_review_001",
+    "tasks/policy_decision_001",
+    "tasks/incident_analysis_001"
+  ],
+  "trials": [
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "final.md",
+          "sha256": "27f1778f04366b7fd3fa63efdbb50331c8fe76f8d9f496ffe13b8887930377e9",
+          "size_bytes": 136
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-001",
+      "score": 1.0,
+      "task_id": "doc_synthesis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-001/trace.jsonl",
+      "trial_index": 1,
+      "workspace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-001/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "final.md",
+          "sha256": "27f1778f04366b7fd3fa63efdbb50331c8fe76f8d9f496ffe13b8887930377e9",
+          "size_bytes": 136
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-002",
+      "score": 1.0,
+      "task_id": "doc_synthesis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-002/trace.jsonl",
+      "trial_index": 2,
+      "workspace_path": "examples/reports/portfolio-demo/trials/doc_synthesis_001/trial-002/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "answer.json",
+          "sha256": "74c522dca766bab93bd548ed02dbaa01f7b3b7b2e5b0754762547288268f39fa",
+          "size_bytes": 72
+        },
+        {
+          "exists": true,
+          "path": "report.md",
+          "sha256": "60d45bf5c5a44334c1d56e780b77489745f90bc36af416580274fe61d9d7e2b2",
+          "size_bytes": 89
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-001",
+      "score": 1.0,
+      "task_id": "data_analysis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-001/trace.jsonl",
+      "trial_index": 1,
+      "workspace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-001/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "answer.json",
+          "sha256": "74c522dca766bab93bd548ed02dbaa01f7b3b7b2e5b0754762547288268f39fa",
+          "size_bytes": 72
+        },
+        {
+          "exists": true,
+          "path": "report.md",
+          "sha256": "60d45bf5c5a44334c1d56e780b77489745f90bc36af416580274fe61d9d7e2b2",
+          "size_bytes": 89
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-002",
+      "score": 1.0,
+      "task_id": "data_analysis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-002/trace.jsonl",
+      "trial_index": 2,
+      "workspace_path": "examples/reports/portfolio-demo/trials/data_analysis_001/trial-002/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "final.md",
+          "sha256": "34ac678d3cbb038b25e5cb70d23585b419796c193103e697a1b8d0de723d9219",
+          "size_bytes": 442
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-001",
+      "score": 1.0,
+      "task_id": "contradiction_review_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-001/trace.jsonl",
+      "trial_index": 1,
+      "workspace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-001/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "final.md",
+          "sha256": "34ac678d3cbb038b25e5cb70d23585b419796c193103e697a1b8d0de723d9219",
+          "size_bytes": 442
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002",
+      "score": 1.0,
+      "task_id": "contradiction_review_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002/trace.jsonl",
+      "trial_index": 2,
+      "workspace_path": "examples/reports/portfolio-demo/trials/contradiction_review_001/trial-002/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "decision.json",
+          "sha256": "fdb634cc74800826868d4450c6adc5892c65a53539b71d12b3300d0465c0e067",
+          "size_bytes": 118
+        },
+        {
+          "exists": true,
+          "path": "rationale.md",
+          "sha256": "f696b0b13f311323fabcdbe035f4a79924c48e182a68cf321a9713949fc32bf5",
+          "size_bytes": 275
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-001",
+      "score": 1.0,
+      "task_id": "policy_decision_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-001/trace.jsonl",
+      "trial_index": 1,
+      "workspace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-001/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "decision.json",
+          "sha256": "fdb634cc74800826868d4450c6adc5892c65a53539b71d12b3300d0465c0e067",
+          "size_bytes": 118
+        },
+        {
+          "exists": true,
+          "path": "rationale.md",
+          "sha256": "f696b0b13f311323fabcdbe035f4a79924c48e182a68cf321a9713949fc32bf5",
+          "size_bytes": 275
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-002",
+      "score": 1.0,
+      "task_id": "policy_decision_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-002/trace.jsonl",
+      "trial_index": 2,
+      "workspace_path": "examples/reports/portfolio-demo/trials/policy_decision_001/trial-002/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "incident.json",
+          "sha256": "4c081b254784a368cf2e25539dff42ac7ee591111c659284e16648024b974197",
+          "size_bytes": 286
+        },
+        {
+          "exists": true,
+          "path": "postmortem.md",
+          "sha256": "6c533fb3316f8326135060e8027ef2bd47260b595b6127c9945159d1f9f227f4",
+          "size_bytes": 227
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-001",
+      "score": 1.0,
+      "task_id": "incident_analysis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-001/trace.jsonl",
+      "trial_index": 1,
+      "workspace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-001/workspace"
+    },
+    {
+      "artifacts": [
+        {
+          "exists": true,
+          "path": "incident.json",
+          "sha256": "4c081b254784a368cf2e25539dff42ac7ee591111c659284e16648024b974197",
+          "size_bytes": 286
+        },
+        {
+          "exists": true,
+          "path": "postmortem.md",
+          "sha256": "6c533fb3316f8326135060e8027ef2bd47260b595b6127c9945159d1f9f227f4",
+          "size_bytes": 227
+        }
+      ],
+      "issues": [],
+      "passed": true,
+      "run_dir": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-002",
+      "score": 1.0,
+      "task_id": "incident_analysis_001",
+      "trace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-002/trace.jsonl",
+      "trial_index": 2,
+      "workspace_path": "examples/reports/portfolio-demo/trials/incident_analysis_001/trial-002/workspace"
+    }
+  ],
+  "trials_per_task": 2
+}

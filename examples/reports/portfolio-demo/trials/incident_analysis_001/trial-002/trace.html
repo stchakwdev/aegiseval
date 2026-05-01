@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AegisEval Trace: incident_analysis_001</title>
+  <style>
+    body { background: #0a0a0a; color: #f5f5f5; font-family: Inter, system-ui, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #333; padding: 0.55rem; text-align: left; vertical-align: top; }
+    th { background: #171717; }
+    pre { white-space: pre-wrap; margin: 0; }
+    .artifact-preview { background: #111; border: 1px solid #333; border-radius: 12px; margin: 1rem 0; padding: 1rem; box-shadow: 0 0 24px rgba(124,58,237,0.10); }
+    .artifact-preview h3 { color: #EC4899; margin-top: 0; }
+    .artifact-preview pre { color: #E5E7EB; }
+  </style>
+</head>
+<body>
+  <h1>Trace: incident_analysis_001</h1>
+  <p><strong>Passed:</strong> True <strong>Score:</strong> 1.0</p>
+  <h2>Artifacts</h2>
+  <table><thead><tr><th>Path</th><th>Exists</th><th>SHA256</th></tr></thead><tbody><tr><td>incident.json</td><td>True</td><td>4c081b254784a368cf2e25539dff42ac7ee591111c659284e16648024b974197</td></tr><tr><td>postmortem.md</td><td>True</td><td>6c533fb3316f8326135060e8027ef2bd47260b595b6127c9945159d1f9f227f4</td></tr></tbody></table>
+  <h2>Artifact previews</h2>
+  <div class="previews"><section class="artifact-preview"><h3>incident.json</h3><pre>{
+  &quot;customer_impact_minutes&quot;: 47,
+  &quot;followups&quot;: [
+    &quot;add circuit breaker around cache invalidation job&quot;,
+    &quot;block malformed deploy flags in CI&quot;
+  ],
+  &quot;highest_severity&quot;: &quot;sev1&quot;,
+  &quot;root_cause&quot;: &quot;cache invalidation job evicted the hot policy index after a malformed deploy flag&quot;
+}</pre></section><section class="artifact-preview"><h3>postmortem.md</h3><pre># Incident postmortem
+
+- 02:18Z: customer-visible timeouts began.
+- 02:24Z: cache invalidation evicted the hot policy index after a malformed deploy flag.
+- 03:05Z: customer-visible timeouts resolved after manual cache warmup.
+</pre></section></div>
+  <h2>Events</h2>
+  <table><thead><tr><th>Seq</th><th>Event</th><th>Payload</th></tr></thead><tbody><tr><td>1</td><td>trial_started</td><td><pre>{&#x27;agent&#x27;: &#x27;dummy&#x27;, &#x27;task_id&#x27;: &#x27;incident_analysis_001&#x27;}</pre></td></tr><tr><td>2</td><td>agent_message</td><td><pre>{&#x27;agent&#x27;: &#x27;dummy&#x27;, &#x27;content&#x27;: &#x27;Solving incident_analysis_001&#x27;}</pre></td></tr><tr><td>3</td><td>artifact_written</td><td><pre>{&#x27;path&#x27;: &#x27;incident.json&#x27;}</pre></td></tr><tr><td>4</td><td>artifact_written</td><td><pre>{&#x27;path&#x27;: &#x27;postmortem.md&#x27;}</pre></td></tr><tr><td>5</td><td>grader_result</td><td><pre>{&#x27;details&#x27;: {&#x27;checks&#x27;: {&#x27;customer_impact_minutes&#x27;: True, &#x27;followups&#x27;: True, &#x27;highest_severity&#x27;: True, &#x27;root_cause&#x27;: True}, &#x27;incident&#x27;: {&#x27;customer_impact_minutes&#x27;: 47, &#x27;followups&#x27;: [&#x27;add circuit breaker around cache invalidation job&#x27;, &#x27;block malformed deploy flags in CI&#x27;], &#x27;highest_severity&#x27;: &#x27;sev1&#x27;, &#x27;root_cause&#x27;: &#x27;cache invalidation job evicted the hot policy index after a malformed deploy flag&#x27;}}, &#x27;issues&#x27;: [], &#x27;passed&#x27;: True, &#x27;score&#x27;: 1.0}</pre></td></tr><tr><td>6</td><td>trial_finished</td><td><pre>{&#x27;passed&#x27;: True, &#x27;score&#x27;: 1.0}</pre></td></tr></tbody></table>
+</body>
+</html>

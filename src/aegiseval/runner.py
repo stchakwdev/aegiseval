@@ -19,6 +19,8 @@ def get_agent(
     model: str | None = None,
     base_url: str | None = None,
     api_key_env: str = "OPENAI_API_KEY",
+    timeout: int = 120,
+    retries: int = 2,
 ):
     if agent_name == "dummy":
         return DummyAgent()
@@ -29,11 +31,23 @@ def get_agent(
     if agent_name == "openai-compatible":
         if model is None or base_url is None:
             raise ValueError("--model and --base-url are required for openai-compatible agent")
-        return OpenAICompatibleAgent(model=model, base_url=base_url, api_key_env=api_key_env)
+        return OpenAICompatibleAgent(
+            model=model,
+            base_url=base_url,
+            api_key_env=api_key_env,
+            timeout=timeout,
+            retries=retries,
+        )
     if agent_name == "anthropic":
         if model is None:
             raise ValueError("--model is required for anthropic agent")
-        return AnthropicAgent(model=model, base_url=base_url or "https://api.anthropic.com/v1", api_key_env=api_key_env)
+        return AnthropicAgent(
+            model=model,
+            base_url=base_url or "https://api.anthropic.com/v1",
+            api_key_env=api_key_env,
+            timeout=timeout,
+            retries=retries,
+        )
     raise ValueError(f"unknown agent: {agent_name}")
 
 
@@ -45,6 +59,8 @@ def run_task(
     model: str | None = None,
     base_url: str | None = None,
     api_key_env: str = "OPENAI_API_KEY",
+    timeout: int = 120,
+    retries: int = 2,
 ) -> TrialResult:
     task_dir = task_dir.resolve()
     task = load_task(task_dir)
@@ -53,11 +69,30 @@ def run_task(
     trace = TraceWriter(out_dir / "trace.jsonl")
     trace.write("trial_started", {"task_id": task.id, "agent": agent_name})
 
-    agent = get_agent(agent_name, agent_command=agent_command, model=model, base_url=base_url, api_key_env=api_key_env)
+    agent = get_agent(
+        agent_name,
+        agent_command=agent_command,
+        model=model,
+        base_url=base_url,
+        api_key_env=api_key_env,
+        timeout=timeout,
+        retries=retries,
+    )
     try:
         agent.run(task, env.workspace, trace)
     except Exception as exc:
         trace.write("trial_failed", {"error_type": type(exc).__name__, "error": str(exc)})
+        artifacts = env.collect_artifacts([artifact.path for artifact in task.expected_artifacts])
+        result = TrialResult(
+            task_id=task.id,
+            passed=False,
+            score=0.0,
+            issues=[f"agent failed: {type(exc).__name__}: {exc}"],
+            artifacts=artifacts,
+            trace_path=str(out_dir / "trace.jsonl"),
+            workspace_path=str(env.workspace),
+        )
+        write_json(out_dir / "result.json", result.model_dump())
         raise
 
     grader_result = grade(task, env.workspace)

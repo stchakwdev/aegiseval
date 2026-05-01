@@ -1,0 +1,6 @@
+{"event": "trial_started", "payload": {"agent": "dummy", "task_id": "data_analysis_001"}, "seq": 1, "ts": "2026-05-01T02:08:42.892860+00:00"}
+{"event": "agent_message", "payload": {"agent": "dummy", "content": "Solving data_analysis_001"}, "seq": 2, "ts": "2026-05-01T02:08:42.892899+00:00"}
+{"event": "artifact_written", "payload": {"path": "answer.json"}, "seq": 3, "ts": "2026-05-01T02:08:42.893083+00:00"}
+{"event": "artifact_written", "payload": {"path": "report.md"}, "seq": 4, "ts": "2026-05-01T02:08:42.893110+00:00"}
+{"event": "grader_result", "payload": {"details": {"answer": {"clean_rows": 4, "top_region": "North", "total_revenue": 750.0}, "expected": {"clean_rows": 4, "top_region": "North", "total_revenue": 750.0}}, "issues": [], "passed": true, "score": 1.0}, "seq": 5, "ts": "2026-05-01T02:08:42.893271+00:00"}
+{"event": "trial_finished", "payload": {"passed": true, "score": 1.0}, "seq": 6, "ts": "2026-05-01T02:08:42.893318+00:00"}

@@ -4,9 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from aegiseval.replay import load_replay
 from aegiseval.io import write_json
-
+from aegiseval.replay import load_replay
 
 PASS = "pass"
 WARN = "warn"
@@ -56,7 +55,7 @@ def build_eval_audit(suite_result: dict[str, Any], suite_dir: Path, sample_count
             "artifacts_recorded",
             PASS if trials and all(replay.get("artifacts") for replay in replays) else FAIL,
             "Artifacts must be recorded so humans can inspect final environment state.",
-            {"missing": [trial.get("run_dir") for trial, replay in zip(trials, replays) if not replay.get("artifacts")]},
+            {"missing": [trial.get("run_dir") for trial, replay in zip(trials, replays, strict=False) if not replay.get("artifacts")]},
         ),
         _check(
             "flake_visibility",
@@ -145,12 +144,12 @@ def _check(name: str, status: str, message: str, details: dict[str, Any]) -> dic
 
 
 def _missing_event_trials(trials: list[dict[str, Any]], events_by_trial: list[list[str]], event_name: str) -> list[str]:
-    return [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial) if event_name not in events]
+    return [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial, strict=False) if event_name not in events]
 
 
 def _missing_lifecycle_trials(trials: list[dict[str, Any]], events_by_trial: list[list[str]]) -> list[str]:
     required = {"trial_started", "trial_finished"}
-    return [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial) if not required.issubset(set(events))]
+    return [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial, strict=False) if not required.issubset(set(events))]
 
 
 def _model_transparency_check(
@@ -166,7 +165,7 @@ def _model_transparency_check(
         )
 
     required = {"model_request_started", "model_request_finished"}
-    missing = [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial) if not required.issubset(set(events))]
+    missing = [trial.get("run_dir", "") for trial, events in zip(trials, events_by_trial, strict=False) if not required.issubset(set(events))]
     return _check(
         "model_call_transparency",
         PASS if not missing else FAIL,
