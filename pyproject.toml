@@ -22,7 +22,7 @@ dev = [
 aegis = "aegiseval.cli:app"
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 testpaths = ["tests"]
 
 [tool.ruff]
