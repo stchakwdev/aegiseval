@@ -1,0 +1,22 @@
+id: data_analysis_001
+version: 0.1.0
+domain: data_analysis
+instruction: >
+  Clean data.csv by excluding invalid rows with missing region or negative revenue. Write answer.json with
+  clean_rows, total_revenue, and top_region, and write report.md explaining the result.
+expected_artifacts:
+  - path: answer.json
+    kind: json
+  - path: report.md
+    kind: markdown
+grader:
+  name: data_analysis
+  kind: code
+tools:
+  - name: filesystem
+    description: Read CSV data and write output artifacts.
+metadata:
+  difficulty: mvp
+  known_failure_modes:
+    - includes invalid revenue rows
+    - omits narrative explanation

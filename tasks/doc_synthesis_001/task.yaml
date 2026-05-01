@@ -1,0 +1,20 @@
+id: doc_synthesis_001
+version: 0.1.0
+domain: document_synthesis
+instruction: >
+  Read the source memos and write final.md. The memo must state the measured benefit of Project Aurora,
+  identify the key rollout risk, and cite source files in square brackets.
+expected_artifacts:
+  - path: final.md
+    kind: markdown
+grader:
+  name: doc_synthesis
+  kind: code
+tools:
+  - name: filesystem
+    description: Read local source documents and write final.md.
+metadata:
+  difficulty: mvp
+  known_failure_modes:
+    - fabricated citations
+    - missing contradictory evidence

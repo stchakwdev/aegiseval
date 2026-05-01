@@ -1,0 +1,22 @@
+[project]
+name = "aegiseval"
+version = "0.1.0"
+description = "Reliable infrastructure for agentic knowledge-work evals"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "typer>=0.12",
+  "rich>=13.7",
+  "pyyaml>=6.0",
+]
+
+[project.scripts]
+aegis = "aegiseval.cli:app"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
