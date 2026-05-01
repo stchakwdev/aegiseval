@@ -1,0 +1,36 @@
+id: import_export_brief_001
+version: 0.1.0
+domain: trade_research
+instruction: Analyze product description, HS-code candidates, shipment data, and restrictions.
+  Write trade_brief.md and hs_code_analysis.json.
+expected_artifacts:
+- path: trade_brief.md
+  kind: markdown
+- path: hs_code_analysis.json
+  kind: json
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        trade_brief.md:
+          required_phrases:
+          - HS 850440
+          - restriction
+          - top supplier
+          - operational risk
+      json:
+        hs_code_analysis.json:
+          equals:
+            selected_hs_code: '850440'
+          contains:
+            top_suppliers:
+            - Shenzhen Power Ltd
+            - Nairobi Solar Co
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

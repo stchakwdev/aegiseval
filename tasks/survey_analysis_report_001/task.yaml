@@ -1,0 +1,36 @@
+id: survey_analysis_report_001
+version: 0.1.0
+domain: survey_analysis
+instruction: Analyze the survey responses. Clean invalid rows, summarize themes, avoid
+  overclaiming, and write survey_report.md and analysis.json.
+expected_artifacts:
+- path: survey_report.md
+  kind: markdown
+- path: analysis.json
+  kind: json
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        survey_report.md:
+          required_phrases:
+          - sampling bias
+          - cleaned n = 8
+          - price sensitivity
+          - privacy concern
+      json:
+        analysis.json:
+          equals:
+            cleaned_n: 8
+            top_theme: price sensitivity
+          contains:
+            caveats:
+            - sampling bias
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

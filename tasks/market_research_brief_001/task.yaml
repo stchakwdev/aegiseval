@@ -1,0 +1,41 @@
+id: market_research_brief_001
+version: 0.1.0
+domain: market_research
+instruction: Prepare a client-ready market research brief for a founder deciding whether
+  to launch PantryPal, an AI meal-planning app for busy parents. Use only the provided
+  competitor notes, interview excerpts, and metrics. Write brief.md and evidence.json.
+expected_artifacts:
+- path: brief.md
+  kind: markdown
+- path: evidence.json
+  kind: json
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        brief.md:
+          required_phrases:
+          - PantryPal
+          - CookMate
+          - weekly planning
+          - go
+          - privacy risk
+          - source-backed
+      json:
+        evidence.json:
+          equals:
+            recommendation: go
+            primary_segment: busy parents
+          contains:
+            competitors:
+            - CookMate
+            - GroceryGenie
+            - FamilyPlate
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

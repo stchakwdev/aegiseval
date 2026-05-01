@@ -1,0 +1,4 @@
+id,distance_miles,sale_price,property_type,months_ago
+Comp 1,0.4,320000,duplex,2
+Comp 2,0.7,335000,duplex,4
+Comp 3,2.5,390000,single-family,1

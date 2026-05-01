@@ -1,0 +1,37 @@
+id: customer_feedback_synthesis_001
+version: 0.1.0
+domain: product_research
+instruction: Synthesize support tickets, reviews, and NPS comments into themes and
+  a product recommendation. Write themes.json and product_memo.md.
+expected_artifacts:
+- path: themes.json
+  kind: json
+- path: product_memo.md
+  kind: markdown
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        product_memo.md:
+          required_phrases:
+          - offline mode
+          - billing confusion
+          - roadmap constraint
+          - representative quotes
+      json:
+        themes.json:
+          equals:
+            top_theme: offline mode
+          contains:
+            themes:
+            - offline mode
+            - billing confusion
+            - slow sync
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

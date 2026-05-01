@@ -1,0 +1,4 @@
+vendor,normalized_annual_cost,service_level,risk,recommended
+Vendor A,12500,no SLA,medium,no
+Vendor B,14400,99.9% SLA,low,yes
+Vendor C,10800,support excluded,disqualifying auto-renewal,no

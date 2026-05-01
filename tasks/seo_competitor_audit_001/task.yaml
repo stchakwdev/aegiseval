@@ -1,0 +1,35 @@
+id: seo_competitor_audit_001
+version: 0.1.0
+domain: seo_analysis
+instruction: Analyze synthetic SEO exports and produce an actionable competitor audit
+  plus keyword plan. Write seo_audit.md and keyword_plan.csv.
+expected_artifacts:
+- path: seo_audit.md
+  kind: markdown
+- path: keyword_plan.csv
+  kind: csv
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        seo_audit.md:
+          required_phrases:
+          - quick wins
+          - search intent
+          - competitor gap
+          - content plan
+      csv:
+        keyword_plan.csv:
+          row_count: 3
+          required_rows:
+          - keyword: meal planning app for families
+            intent: commercial
+            priority: high
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

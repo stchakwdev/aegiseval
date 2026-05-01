@@ -1,0 +1,38 @@
+id: policy_update_diff_001
+version: 0.1.0
+domain: policy_review
+instruction: Compare old and new policy plus legal notes. Write change_log.md, faq.md,
+  and risks.json.
+expected_artifacts:
+- path: change_log.md
+  kind: markdown
+- path: faq.md
+  kind: markdown
+- path: risks.json
+  kind: json
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        change_log.md:
+          required_phrases:
+          - meal limit
+          - software approval
+          - missing receipt
+        faq.md:
+          required_phrases:
+          - pre-approval
+          - receipt required
+      json:
+        risks.json:
+          contains:
+            escalations:
+            - contractor reimbursement ambiguity
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

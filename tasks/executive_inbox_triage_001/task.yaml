@@ -1,0 +1,40 @@
+id: executive_inbox_triage_001
+version: 0.1.0
+domain: operations
+instruction: Triage the executive inbox. Use the CEO preferences and calendar constraints.
+  Write triage.json, drafts.md, and schedule.md.
+expected_artifacts:
+- path: triage.json
+  kind: json
+- path: drafts.md
+  kind: markdown
+- path: schedule.md
+  kind: markdown
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        drafts.md:
+          required_phrases:
+          - customer escalation
+          - board deck
+          - vendor renewal
+        schedule.md:
+          required_phrases:
+          - no overlap
+          - Tuesday
+          - reschedule
+      json:
+        triage.json:
+          equals:
+            messages.m01.priority: P0
+            messages.m03.owner: CEO
+            messages.m04.priority: P1
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

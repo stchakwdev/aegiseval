@@ -1,0 +1,37 @@
+id: real_estate_comp_report_001
+version: 0.1.0
+domain: real_estate_research
+instruction: Build a conservative comparable-sales report and valuation. Write comp_report.md
+  and valuation.json.
+expected_artifacts:
+- path: comp_report.md
+  kind: markdown
+- path: valuation.json
+  kind: json
+grader:
+  name: knowledge_work
+  kind: hybrid
+  config:
+    checks:
+      markdown:
+        comp_report.md:
+          required_phrases:
+          - conservative ARV
+          - repair caveat
+          - Comp 1
+          - Comp 2
+      json:
+        valuation.json:
+          equals:
+            selected_arv: 315000
+            repair_adjustment: 25000
+          contains:
+            selected_comps:
+            - Comp 1
+            - Comp 2
+tools:
+- name: filesystem
+  description: Read local fixtures and write the requested client deliverables.
+metadata:
+  difficulty: realistic
+  source_inspiration: fiverr_upwork_marketplace_recon_2026

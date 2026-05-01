@@ -1,0 +1,4 @@
+company,domain,industry,target_role,confidence,exclusion_reason
+Northwind Clinics,northwindclinics.example,healthcare,Operations Director,0.90,
+Kibo Solar,kibosolar.example,energy,VP Operations,0.80,
+Maple HR,maplehr.example,software,Head of People,0.75,

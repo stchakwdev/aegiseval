@@ -1,0 +1,22 @@
+{
+  "messages": {
+    "m01": {
+      "priority": "P0",
+      "owner": "Head of CS",
+      "deadline": "Friday"
+    },
+    "m02": {
+      "priority": "P3",
+      "owner": "EA"
+    },
+    "m03": {
+      "priority": "P1",
+      "owner": "CEO",
+      "deadline": "Tuesday"
+    },
+    "m04": {
+      "priority": "P1",
+      "owner": "Ops"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "recommendation": "go",
+  "primary_segment": "busy parents",
+  "competitors": [
+    "CookMate",
+    "GroceryGenie",
+    "FamilyPlate"
+  ],
+  "risks": [
+    "privacy risk"
+  ],
+  "source_ids": [
+    "competitors.md",
+    "interviews.md",
+    "metrics.csv"
+  ]
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AegisEval Hybrid Knowledge-Work Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; background: #020617; color: #e5e7eb; font-family: 'JetBrains Mono', monospace; }
+    .page { max-width: 1280px; margin: 0 auto; padding: 32px; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .pulse { width: 12px; height: 12px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 0 rgba(34,211,238,.7); animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34,211,238,.7); } 70% { box-shadow: 0 0 0 14px rgba(34,211,238,0); } 100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); } }
+    h1 { font-size: 22px; margin: 0; letter-spacing: -0.03em; }
+    .subtitle { color: #94a3b8; margin-top: 6px; font-size: 12px; }
+    .frame { border: 1px solid #1e293b; border-radius: 18px; background: #0f172a; box-shadow: 0 24px 80px rgba(0,0,0,.35); overflow: hidden; }
+    svg { display: block; width: 100%; height: auto; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 14px; padding: 16px; }
+    .card h3 { margin: 0 0 10px; font-size: 13px; color: #f8fafc; }
+    .card ul { margin: 0; padding-left: 0; list-style: none; color: #cbd5e1; font-size: 11px; line-height: 1.7; }
+    footer { color: #64748b; font-size: 10px; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="pulse"></div>
+      <div>
+        <h1>AegisEval Hybrid Knowledge-Work Eval Architecture</h1>
+        <div class="subtitle">Local-first task harness · code graders · deterministic/local judge proxy · rank stability analysis</div>
+      </div>
+    </header>
+    <section class="frame">
+      <svg viewBox="0 0 1180 760" role="img" aria-label="AegisEval hybrid architecture diagram">
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker>
+          <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee"/></marker>
+          <marker id="arrowRose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#fb7185"/></marker>
+          <style>
+            .label { font: 600 12px 'JetBrains Mono', monospace; fill: #f8fafc; }
+            .sub { font: 9px 'JetBrains Mono', monospace; fill: #94a3b8; }
+            .tiny { font: 8px 'JetBrains Mono', monospace; fill: #cbd5e1; }
+            .line { fill: none; stroke: #64748b; stroke-width: 1.5; marker-end: url(#arrow); }
+            .cyanLine { fill:none; stroke:#22d3ee; stroke-width:1.7; marker-end:url(#arrowCyan); }
+            .roseLine { fill:none; stroke:#fb7185; stroke-width:1.4; stroke-dasharray:5 4; marker-end:url(#arrowRose); }
+          </style>
+        </defs>
+        <rect width="1180" height="760" fill="#020617"/><rect width="1180" height="760" fill="url(#grid)" opacity="0.8"/>
+
+        <!-- arrows behind boxes -->
+        <path class="cyanLine" d="M140 165 C220 165 245 165 315 165"/>
+        <path class="line" d="M500 165 C570 165 595 165 670 165"/>
+        <path class="line" d="M850 165 C930 165 950 210 950 270"/>
+        <path class="line" d="M420 225 C420 285 420 320 420 370"/>
+        <path class="line" d="M420 430 C420 480 420 520 420 570"/>
+        <path class="line" d="M550 400 C620 400 650 400 720 400"/>
+        <path class="roseLine" d="M850 430 C920 500 960 540 1010 595"/>
+        <path class="cyanLine" d="M850 370 C930 330 970 320 1010 310"/>
+        <path class="line" d="M720 430 C650 520 600 570 540 610"/>
+        <path class="line" d="M840 610 C770 610 720 610 650 610"/>
+
+        <!-- boundaries -->
+        <rect x="40" y="88" width="1095" height="575" rx="14" fill="none" stroke="#fbbf24" stroke-width="1.3" stroke-dasharray="8 4" opacity="0.8"/>
+        <text x="58" y="112" class="tiny" fill="#fbbf24">local reproducible eval workspace</text>
+
+        <!-- component helper: opaque rect + translucent rect -->
+        <g transform="translate(60,135)"><rect width="155" height="60" rx="6" fill="#0f172a"/><rect width="155" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/><text x="16" y="24" class="label">Task Corpus</text><text x="16" y="42" class="sub">15 tasks · fixtures · rubrics</text></g>
+        <g transform="translate(315,125)"><rect width="185" height="80" rx="6" fill="#0f172a"/><rect width="185" height="80" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/><text x="16" y="24" class="label">Agent Adapter</text><text x="16" y="43" class="sub">OpenAI-compatible</text><text x="16" y="58" class="sub">JSON mode + repair</text></g>
+        <g transform="translate(670,125)"><rect width="180" height="80" rx="6" fill="#0f172a"/><rect width="180" height="80" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/><text x="16" y="24" class="label">Model Under Test</text><text x="16" y="43" class="sub">GLM · Kimi · DeepSeek</text><text x="16" y="58" class="sub">writes workspace files</text></g>
+        <g transform="translate(330,370)"><rect width="190" height="60" rx="6" fill="#0f172a"/><rect width="190" height="60" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/><text x="16" y="24" class="label">Code Graders</text><text x="16" y="42" class="sub">objective constraints</text></g>
+        <g transform="translate(720,360)"><rect width="180" height="80" rx="6" fill="#0f172a"/><rect width="180" height="80" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/><text x="16" y="24" class="label">Judge Layer</text><text x="16" y="43" class="sub">subjective quality</text><text x="16" y="58" class="sub">decision usefulness</text></g>
+        <g transform="translate(1010,270)"><rect width="100" height="80" rx="6" fill="#0f172a"/><rect width="100" height="80" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/><text x="12" y="24" class="label">Traces</text><text x="12" y="43" class="sub">JSONL</text><text x="12" y="58" class="sub">HTML</text></g>
+        <g transform="translate(330,570)"><rect width="220" height="70" rx="6" fill="#0f172a"/><rect width="220" height="70" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/><text x="16" y="25" class="label">Hybrid Scoring</text><text x="16" y="44" class="sub">min(code, .7 code + .3 judge)</text></g>
+        <g transform="translate(1010,575)"><rect width="100" height="70" rx="6" fill="#0f172a"/><rect width="100" height="70" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/><text x="12" y="25" class="label">Reports</text><text x="12" y="44" class="sub">rank stability</text></g>
+        <g transform="translate(680,575)"><rect width="160" height="70" rx="6" fill="#0f172a"/><rect width="160" height="70" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/><text x="16" y="25" class="label">Disagreement</text><text x="16" y="44" class="sub">code vs judge queue</text></g>
+
+        <!-- legend outside boundary -->
+        <g transform="translate(60,700)"><text class="tiny" x="0" y="0">Legend:</text><rect x="70" y="-10" width="12" height="12" fill="rgba(8,51,68,.4)" stroke="#22d3ee"/><text class="tiny" x="90" y="0">agent/model IO</text><rect x="195" y="-10" width="12" height="12" fill="rgba(6,78,59,.4)" stroke="#34d399"/><text class="tiny" x="215" y="0">deterministic grading</text><rect x="370" y="-10" width="12" height="12" fill="rgba(76,29,149,.4)" stroke="#a78bfa"/><text class="tiny" x="390" y="0">judge quality</text><rect x="510" y="-10" width="12" height="12" fill="rgba(136,19,55,.4)" stroke="#fb7185"/><text class="tiny" x="530" y="0">audit/trace integrity</text></g>
+      </svg>
+    </section>
+    <section class="cards">
+      <div class="card"><h3>Signal goal</h3><ul><li>• Real marketplace-style knowledge work</li><li>• Objective correctness plus client usefulness</li><li>• Rank stability across code and hybrid scores</li></ul></div>
+      <div class="card"><h3>Integrity controls</h3><ul><li>• Local fixtures, reproducible runs</li><li>• JSON mode and repair diagnostics</li><li>• Human review queues for disagreement cases</li></ul></div>
+      <div class="card"><h3>New task families</h3><ul><li>• Market research, VA ops, SEO, survey analysis</li><li>• Procurement, policy diff, feedback synthesis</li><li>• Real estate comps, import/export briefs</li></ul></div>
+    </section>
+    <footer>Generated for AegisEval · dark SVG architecture diagram · standalone HTML</footer>
+  </main>
+</body>
+</html>
